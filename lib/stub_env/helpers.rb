@@ -29,6 +29,9 @@ module StubEnv
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:fetch).and_call_original
       add_stubbed_value(STUBBED_KEY, true)
+      allow(ENV).to receive(:values_at) do |*args|
+        args.map { |arg| ENV[arg] }
+      end
     end
   end
 end

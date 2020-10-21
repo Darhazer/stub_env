@@ -162,4 +162,23 @@ shared_examples 'stub_env tests' do
       end
     end
   end
+
+  describe '#values_at' do
+    before :each do
+      ENV['TO_OVERWRITE'] = 'to overwrite'
+    end
+
+    context 'when no values are stubbed' do
+      it 'returns the original values' do
+        expect(ENV.values_at('TO_OVERWRITE', 'UNSTUBBED')).to contain_exactly('to overwrite', 'unstubbed')
+      end
+    end
+
+    context 'when a value is stubbed' do
+      it 'returns the stubbed values while leaving the rest' do
+        stub_env('TO_OVERWRITE', 'overwritten')
+        expect(ENV.values_at('TO_OVERWRITE', 'UNSTUBBED')).to contain_exactly('overwritten', 'unstubbed')
+      end
+    end
+  end
 end
